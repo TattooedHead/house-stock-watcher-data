@@ -14,7 +14,7 @@ from xml.etree import ElementTree
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
 
-_now = datetime.datetime.utcnow().year
+_now = datetime.datetime.now(datetime.UTC).year
 SCAN_YEARS = list(range(2008, _now + 1))
 # Optional override for testing: set the SCAN_YEARS env var to a comma-separated
 # list (e.g. "2025,2026") to limit the scrape to those years. Unset — as in CI —
@@ -90,6 +90,33 @@ def load_existing(out_path):
         data = json.load(f)
     known_ids = {t["filing_id"] for t in data}
     return data, known_ids
+
+
+def load_manifest(manifest_path, existing_trades):
+    """Load the filings manifest: doc_id -> {year, trades, jammed, fetched_at}.
+    Every filing we've successfully fetched+parsed lives here — INCLUDING ones
+    that produced zero trades — so we never re-download them. On first run (no
+    file) we seed it from the existing dataset so the filings we already have
+    count as seen. jammed counts can't be reconstructed retroactively, so
+    seeded entries get jammed=0 and fetched_at=None."""
+    if os.path.exists(manifest_path):
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    manifest = {}
+    for t in existing_trades:
+        fid = t.get("filing_id")
+        if not fid:
+            continue
+        if fid not in manifest:
+            ym = re.search(r"/ptr-pdfs/(\d{4})/", t.get("source_url", ""))
+            manifest[fid] = {
+                "year": int(ym.group(1)) if ym else None,
+                "trades": 0,
+                "jammed": 0,
+                "fetched_at": None,
+            }
+        manifest[fid]["trades"] += 1
+    return manifest
 
 
 def fetch_with_retry(url, max_retries=3, backoff=2.0, timeout=30):
@@ -276,6 +303,7 @@ def parse_jammed_row(raw, member):
 def parse_pdf(pdf_bytes, member):
     trades = []
     jammed = []
+    ok = True
     try:
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             last_col = None
@@ -357,7 +385,8 @@ def parse_pdf(pdf_bytes, member):
                     })
     except Exception as e:
         log.error(f"Failed to parse PDF for DocID {member['doc_id']}: {e}")
-    return trades, jammed
+        ok = False
+    return trades, jammed, ok
 
 
 def fetch_pdf(member):
@@ -442,7 +471,11 @@ def main():
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
     existing_trades, known_ids = load_existing(out_path)
-    log.info(f"Loaded {len(existing_trades)} existing trades. Scanning years: {SCAN_YEARS}")
+    manifest_path = os.path.join(os.path.dirname(out_path), "filings_manifest.json")
+    manifest = load_manifest(manifest_path, existing_trades)
+    today = datetime.datetime.now(datetime.UTC).date().isoformat()
+    log.info(f"Loaded {len(existing_trades)} existing trades, "
+             f"{len(manifest)} filings in manifest. Scanning years: {SCAN_YEARS}")
 
     jammed_path = os.path.join(os.path.dirname(out_path), "jammed_rows.jsonl")
     jammed_log = open(jammed_path, "a", encoding="utf-8")
@@ -450,17 +483,29 @@ def main():
     new_trades = []
     for year in SCAN_YEARS:
         members = fetch_index(year)
-        new_in_year = [m for m in members if m["doc_id"] not in known_ids]
+        new_in_year = [m for m in members if m["doc_id"] not in manifest]
         log.info(f"  {len(new_in_year)} new filings to fetch for {year}")
         for i, member in enumerate(new_in_year):
             log.info(f"  [{year}] {i+1}/{len(new_in_year)} — {member['first']} {member['last']} ({member['doc_id']})")
             pdf_bytes = fetch_pdf(member)
             if pdf_bytes:
-                trades, jammed = parse_pdf(pdf_bytes, member)
-                new_trades.extend(trades)
-                for j in jammed:
-                    jammed_log.write(json.dumps(j) + "\n")
-                jammed_log.flush()
+                trades, jammed, ok = parse_pdf(pdf_bytes, member)
+                # Record in the manifest ONLY on a clean parse — even if it found
+                # zero trades. A genuine parse failure (ok=False) is left out so
+                # it's retried next run. The jammed count is kept so the deferred
+                # orphan-fragment recovery can later find and re-fetch exactly the
+                # filings that need it (jammed > 0) instead of rescraping the lot.
+                if ok:
+                    new_trades.extend(trades)
+                    for j in jammed:
+                        jammed_log.write(json.dumps(j) + "\n")
+                    jammed_log.flush()
+                    manifest[member["doc_id"]] = {
+                        "year": member["year"],
+                        "trades": len(trades),
+                        "jammed": len(jammed),
+                        "fetched_at": today,
+                    }
             time.sleep(DELAY)
 
     jammed_log.close()
@@ -479,6 +524,10 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(all_trades, f, indent=2)
     log.info(f"Written to {out_path}")
+
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2, sort_keys=True)
+    log.info(f"Manifest written: {len(manifest)} filing(s) tracked")
 
     # Post-scrape audit gate. The data is already saved (we never lose it or
     # stall the feed); we only ALERT on anything the guards couldn't clean.

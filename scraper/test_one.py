@@ -9,9 +9,9 @@ print(f"Fetching {PDF_URL}...")
 resp = fetch_with_retry(PDF_URL)
 print("Downloaded. Parsing...")
 
-trades = parse_pdf(resp.content, MEMBER)
+trades, jammed, ok = parse_pdf(resp.content, MEMBER)
 
-print(f"\n--- {len(trades)} trade(s) extracted ---\n")
+print(f"\n--- {len(trades)} trade(s) extracted (parse ok={ok}, {len(jammed)} jammed) ---\n")
 for t in trades:
     print(
         f"  {t['ticker']} | {t['type']} | {t['transaction_date']} "
