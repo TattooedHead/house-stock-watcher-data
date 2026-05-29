@@ -7,6 +7,8 @@ Downloads House PTR (Periodic Transaction Report) filings from the House disclos
 - GitHub Actions runs `scraper/fetch.py` on a schedule
 - It downloads the yearly ZIP index, finds new PTR filing IDs, fetches only those PDFs, parses trades, and appends to the JSON
 - Deduplication is by `filing_id` — already-seen doc IDs are skipped entirely
+- Every run **self-cleans** the output (see "Self-cleaning guards" below): it auto-fixes garbled date years, drops duplicate rows, and runs an audit gate that fails the run loudly (in plain English) only if something it *can't* auto-clean appears
+- **Testing switch:** set the `SCAN_YEARS` env var to a comma-separated list (e.g. `SCAN_YEARS="2025,2026"`) to scrape only those years. Unset — as in CI — scans all years 2008–present
 
 ## Key files
 - `scraper/fetch.py` — the scraper
@@ -39,10 +41,19 @@ The already-logged backlog (~20.5k rows) was folded in via `backfill_jammed.py` 
 Ran `test_all.py` over the full dataset and fixed three issues. Dataset **23,449 → 23,368**; audit now verdict-clean.
 
 1. **Date padding (fixed at source + repaired).** Dates were stored as the PDF wrote them, so some were single-digit (`3/7/2018`) instead of `MM/DD/YYYY`. `normalize_date()` in `fetch.py` now zero-pads both date fields in both write paths (idempotent, lossless); `fix_dates.py` repaired the ~4,580 existing ones.
-2. **Garbled years (repaired only).** 8 dates had OCR-garbled years (`3031`, `2202`, `1935`, `2001`). `fix_garbled_years.py` snaps any year outside 2008–2027 to the filing year parsed from `source_url` (`/ptr-pdfs/YYYY/`), corroborated by the row's other date. No scraper-side guard was added — it's a heuristic, deferred.
+2. **Garbled years.** 8 dates had OCR-garbled years (`3031`, `2202`, `1935`, `2001`). `fix_garbled_years.py` snapped any year outside 2008–2027 to the filing year parsed from `source_url` (`/ptr-pdfs/YYYY/`), corroborated by the row's other date. **Now also baked into the scraper** as a guard (see below), using the filing year directly (`member["year"]`).
 3. **Duplicate trades (repaired only).** 109 rows shared the 5-field key, but **only 81 were true artifacts** (byte-identical); the other 28 differed only by `owner` and are real distinct trades. `fix_dupes.py` removed the 81 using the correct `owner`-inclusive key (see the IMPORTANT note above).
 
-> **Deferred root cause:** the 81 artifacts clustered in 44 filings (up to 5 copies each), which points at the PDF parser re-emitting rows at multi-page table boundaries. The data is clean now, but `fetch.py` could regenerate dupes on a future run — not yet investigated.
+> **Root cause — confirmed and handled.** The 81 artifacts clustered in 44 filings (up to 5 copies each): pdfplumber re-emits certain rows (wrapped rows split in two, and rows repeated across a page break). Rather than chase fragile extraction settings, the scraper now **dedups at write time** (see Self-cleaning guards). Verified on a live run 2026-05-29 — it caught 4 fresh artifacts before they reached the file.
+
+## Self-cleaning guards (baked into the scraper)
+The one-time repairs above are now **permanent guards in `fetch.py`**, so the dataset stays clean on every run regardless of how messy a new filing is:
+
+1. **Garbled-year fix** — `normalize_date(s, filing_year)` zero-pads dates AND snaps any out-of-range year to the filing's own year (`member["year"]`). Idempotent and lossless.
+2. **Write-time dedup** — `dedup_trades()` drops byte-identical duplicate rows using the `owner`-inclusive key, right before writing. Handles pdfplumber's row re-emits no matter the cause.
+3. **Audit gate** — `validate_dataset()` re-checks the final dataset (schema, empty critical fields, unreadable dates, bad types). If it finds anything the guards *couldn't* auto-clean, it writes plain-English details to `data/validation_report.txt` (gitignored), logs them, and exits non-zero so the scheduled GitHub Action goes red and alerts you. **The data is written first** — the feed never stalls and nothing is lost.
+
+Philosophy: auto-clean everything we know how to (silently), and fail loudly only on the genuinely new/unknown.
 
 ## Output schema
 Each trade in `all_transactions.json`:

@@ -1,5 +1,6 @@
 import os
 import io
+import sys
 import re
 import json
 import time
@@ -15,6 +16,12 @@ log = logging.getLogger(__name__)
 
 _now = datetime.datetime.utcnow().year
 SCAN_YEARS = list(range(2008, _now + 1))
+# Optional override for testing: set the SCAN_YEARS env var to a comma-separated
+# list (e.g. "2025,2026") to limit the scrape to those years. Unset — as in CI —
+# scans every year.
+_env_years = os.environ.get("SCAN_YEARS")
+if _env_years:
+    SCAN_YEARS = [int(y.strip()) for y in _env_years.split(",") if y.strip()]
 ZIP_URL = "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/{year}FD.zip"
 PDF_URL = "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/{year}/{doc_id}.pdf"
 HEADERS = {"User-Agent": "HouseStockWatcher/1.0 chrishangsleben@gmail.com"}
@@ -227,14 +234,17 @@ def _jammed_fields(raw):
     return None
 
 
-def normalize_date(s):
-    """Zero-pad a M/D/YYYY date to MM/DD/YYYY for a consistent schema.
-    Idempotent. Returns the input unchanged (stripped) if it isn't a
-    3-part all-numeric date, so garbled values are never silently lost."""
+def normalize_date(s, filing_year=None):
+    """Zero-pad a M/D/YYYY date to MM/DD/YYYY, and (when filing_year is given)
+    snap an out-of-range OCR-garbled year to the authoritative filing year.
+    Idempotent. Returns the input unchanged (stripped) if it isn't a 3-part
+    all-numeric date, so unrecoverable values are never silently mangled."""
     s = (s or "").strip()
     parts = s.split("/")
     if len(parts) == 3 and all(p.isdigit() for p in parts):
         m, d, y = parts
+        if filing_year and not (2008 <= int(y) <= _now + 1):
+            y = str(filing_year)
         return f"{int(m):02d}/{int(d):02d}/{y}"
     return s
 
@@ -247,8 +257,8 @@ def parse_jammed_row(raw, member):
         return None
     owner_code, tx_type, tx_date, disc_date, amount_raw, ticker, asset_desc = fields
     return {
-        "transaction_date": normalize_date(tx_date),
-        "disclosure_date": normalize_date(disc_date),
+        "transaction_date": normalize_date(tx_date, member["year"]),
+        "disclosure_date": normalize_date(disc_date, member["year"]),
         "ticker": ticker,
         "asset_description": asset_desc,
         "asset_type": "Stock",
@@ -331,8 +341,8 @@ def parse_pdf(pdf_bytes, member):
                         log.warning(f"Could not parse amount '{amount_raw}' for {member['doc_id']}")
 
                     trades.append({
-                        "transaction_date": normalize_date(row[col["tx_date"]] or ""),
-                        "disclosure_date": normalize_date(row[col["disc_date"]] or ""),
+                        "transaction_date": normalize_date(row[col["tx_date"]] or "", member["year"]),
+                        "disclosure_date": normalize_date(row[col["disc_date"]] or "", member["year"]),
                         "ticker": ticker,
                         "asset_description": asset_desc,
                         "asset_type": "Stock",
@@ -369,6 +379,63 @@ def sort_key(trade):
         return (0, 0, 0)
 
 
+def dedup_trades(trades):
+    """Drop byte-identical duplicate trades the PDF parser sometimes emits
+    (wrapped rows split in two, or rows repeated across a page break).
+    owner is in the key on purpose: the same trade for Self vs Dependent
+    Child is two real, distinct disclosures and must both be kept."""
+    seen = set()
+    out = []
+    for r in trades:
+        k = (r.get("filing_id"), r.get("ticker"), r.get("transaction_date"),
+             r.get("type"), r.get("amount"), r.get("owner"))
+        if k in seen:
+            continue
+        seen.add(k)
+        out.append(r)
+    return out
+
+
+# Fields/values the dataset must satisfy after the guards have run. Anything
+# the guards could NOT auto-clean is reported in plain English by the gate.
+_EXPECTED_FIELDS = {
+    "transaction_date", "disclosure_date", "ticker", "asset_description",
+    "asset_type", "type", "amount", "amount_mid", "representative",
+    "district", "owner", "filing_id", "source_url",
+}
+_CRITICAL_FIELDS = ("ticker", "representative", "filing_id",
+                    "transaction_date", "type", "amount")
+_VALID_TYPES = set(TYPE_MAP.values())
+_DATE_OK_RE = re.compile(r"^\d{2}/\d{2}/\d{4}$")
+
+
+def validate_dataset(trades):
+    """Return a list of plain-English problem messages for issues the guards
+    could NOT auto-clean (so a human/Claude can look). Empty list == clean."""
+    issues = []
+    for r in trades:
+        fid = r.get("filing_id", "?")
+        rep = r.get("representative", "?")
+        missing = _EXPECTED_FIELDS - set(r.keys())
+        if missing:
+            issues.append(f"Filing {fid} ({rep}): record is missing fields {sorted(missing)}")
+        for f in _CRITICAL_FIELDS:
+            v = r.get(f)
+            if v is None or (isinstance(v, str) and not v.strip()):
+                issues.append(f"Filing {fid} ({rep}): required field '{f}' is empty")
+        for f in ("transaction_date", "disclosure_date"):
+            v = str(r.get(f, ""))
+            ok = False
+            if _DATE_OK_RE.match(v):
+                mm, dd, yy = int(v[:2]), int(v[3:5]), int(v[-4:])
+                ok = 1 <= mm <= 12 and 1 <= dd <= 31 and 2008 <= yy <= _now + 1
+            if not ok:
+                issues.append(f"Filing {fid} ({rep}): {f} '{v}' isn't a readable date I could fix")
+        if r.get("type") not in _VALID_TYPES:
+            issues.append(f"Filing {fid} ({rep}): transaction type '{r.get('type')}' is not Purchase/Sale/Exchange")
+    return issues
+
+
 def main():
     out_path = os.path.join(os.path.dirname(__file__), "..", "data", "all_transactions.json")
     out_path = os.path.normpath(out_path)
@@ -401,11 +468,35 @@ def main():
 
     all_trades = existing_trades + new_trades
     all_trades.sort(key=sort_key, reverse=True)
+
+    deduped = dedup_trades(all_trades)
+    removed = len(all_trades) - len(deduped)
+    if removed:
+        log.info(f"Removed {removed} duplicate row(s) at write time")
+    all_trades = deduped
     log.info(f"Total trades: {len(all_trades)} ({len(new_trades)} new)")
 
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(all_trades, f, indent=2)
     log.info(f"Written to {out_path}")
+
+    # Post-scrape audit gate. The data is already saved (we never lose it or
+    # stall the feed); we only ALERT on anything the guards couldn't clean.
+    issues = validate_dataset(all_trades)
+    if not issues:
+        log.info("Audit gate: dataset is clean — nothing the guards couldn't handle.")
+        return
+    report_path = os.path.join(os.path.dirname(out_path), "validation_report.txt")
+    with open(report_path, "w", encoding="utf-8") as f:
+        f.write(f"Dataset validation found {len(issues)} issue(s) the scraper could not auto-clean.\n")
+        f.write("The data was still saved; these rows need a human (or Claude) to review.\n\n")
+        for line in issues:
+            f.write(line + "\n")
+    for line in issues[:50]:
+        log.error("AUDIT ISSUE: " + line)
+    log.error(f"Audit gate FAILED: {len(issues)} issue(s). Details in {report_path}. "
+              f"Data was saved; failing the run so you're alerted.")
+    sys.exit(1)
 
 
 if __name__ == "__main__":

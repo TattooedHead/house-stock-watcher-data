@@ -5,3 +5,6 @@ __pycache__/
 # Local safety snapshots (git history is the backup)
 data/*.backup.json
 data/*.prerepair.json
+
+# Transient audit-gate report (regenerated each run; the CI log is the record)
+data/validation_report.txt
