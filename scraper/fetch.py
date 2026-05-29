@@ -5,6 +5,7 @@ import json
 import time
 import zipfile
 import logging
+import datetime
 import requests
 import pdfplumber
 from xml.etree import ElementTree
@@ -12,10 +13,11 @@ from xml.etree import ElementTree
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
 
-YEARS = [2022, 2023, 2024, 2025, 2026]
+_now = datetime.datetime.utcnow().year
+SCAN_YEARS = [_now - 1, _now]
 ZIP_URL = "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/{year}FD.zip"
 PDF_URL = "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/{year}/{doc_id}.pdf"
-HEADERS = {"User-Agent": "HouseStockWatcher/1.0 illshootthat@gmail.com"}
+HEADERS = {"User-Agent": "HouseStockWatcher/1.0 chrishangsleben@gmail.com"}
 DELAY = 0.5
 
 OWNER_MAP = {"": "Self", "SP": "Spouse", "JT": "Joint", "DC": "Dependent Child"}
@@ -24,6 +26,15 @@ ASSET_INCLUDE = {"[ST]", "[EQ]"}
 
 TICKER_RE = re.compile(r'\(([A-Z]{1,5})\)')
 ASSET_TYPE_RE = re.compile(r'\[([A-Z]{2})\]')
+
+
+def load_existing(out_path):
+    if not os.path.exists(out_path):
+        return [], set()
+    with open(out_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    known_ids = {t["filing_id"] for t in data}
+    return data, known_ids
 
 
 def fetch_index(year):
@@ -135,23 +146,30 @@ def sort_key(trade):
 
 
 def main():
-    all_trades = []
-    for year in YEARS:
-        members = fetch_index(year)
-        for i, member in enumerate(members):
-            log.info(f"  [{year}] {i+1}/{len(members)} — {member['first']} {member['last']} ({member['doc_id']})")
-            pdf_bytes = fetch_pdf(member)
-            if pdf_bytes:
-                trades = parse_pdf(pdf_bytes, member)
-                all_trades.extend(trades)
-            time.sleep(DELAY)
-
-    all_trades.sort(key=sort_key, reverse=True)
-    log.info(f"Total trades extracted: {len(all_trades)}")
-
     out_path = os.path.join(os.path.dirname(__file__), "..", "data", "all_transactions.json")
     out_path = os.path.normpath(out_path)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
+
+    existing_trades, known_ids = load_existing(out_path)
+    log.info(f"Loaded {len(existing_trades)} existing trades. Scanning years: {SCAN_YEARS}")
+
+    new_trades = []
+    for year in SCAN_YEARS:
+        members = fetch_index(year)
+        new_in_year = [m for m in members if m["doc_id"] not in known_ids]
+        log.info(f"  {len(new_in_year)} new filings to fetch for {year}")
+        for i, member in enumerate(new_in_year):
+            log.info(f"  [{year}] {i+1}/{len(new_in_year)} — {member['first']} {member['last']} ({member['doc_id']})")
+            pdf_bytes = fetch_pdf(member)
+            if pdf_bytes:
+                trades = parse_pdf(pdf_bytes, member)
+                new_trades.extend(trades)
+            time.sleep(DELAY)
+
+    all_trades = existing_trades + new_trades
+    all_trades.sort(key=sort_key, reverse=True)
+    log.info(f"Total trades: {len(all_trades)} ({len(new_trades)} new)")
+
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(all_trades, f, indent=2)
     log.info(f"Written to {out_path}")

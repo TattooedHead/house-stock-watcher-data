@@ -7,7 +7,7 @@ import pdfplumber
 DOC_ID = "20026791"
 YEAR = 2025
 PDF_URL = f"https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/{YEAR}/{DOC_ID}.pdf"
-HEADERS = {"User-Agent": "HouseStockWatcher/1.0 illshootthat@gmail.com"}
+HEADERS = {"User-Agent": "HouseStockWatcher/1.0 chrishangsleben@gmail.com"}
 
 OWNER_MAP = {"": "Self", "SP": "Spouse", "JT": "Joint", "DC": "Dependent Child"}
 TYPE_MAP = {"P": "Purchase", "S": "Sale", "E": "Exchange"}
