@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 _now = datetime.datetime.utcnow().year
-SCAN_YEARS = [_now - 1, _now]
+SCAN_YEARS = list(range(2008, _now + 1))
 ZIP_URL = "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/{year}FD.zip"
 PDF_URL = "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/{year}/{doc_id}.pdf"
 HEADERS = {"User-Agent": "HouseStockWatcher/1.0 chrishangsleben@gmail.com"}
@@ -27,6 +27,53 @@ ASSET_INCLUDE = {"[ST]", "[EQ]"}
 TICKER_RE = re.compile(r'\(([A-Z]{1,5})\)')
 ASSET_TYPE_RE = re.compile(r'\[([A-Z]{2})\]')
 _AMOUNT_CLEAN_RE = re.compile(r'[$,]')
+
+# --- Jammed-row recovery ---------------------------------------------------
+# pdfplumber sometimes fails to split a table row into columns and dumps the
+# whole row into col[0] as one string (with the other columns None). These rows
+# come in three shapes depending on where the (TICKER) landed:
+#   A  asset name + (TICKER) inline, before the type:  "Apple Inc. (AAPL) [ST] P 8/1/18 8/1/18 $1,001 - $15,000"
+#   B  ticker alone at the start of the next line:     "Northwest Natural gas Company P ... $1,001 - $15,000\n(NWN)"
+#   C  long asset name wrapped, ticker mid-continuation:"Intl Business Machines S ... $1,001 - $15,000\nCorporation (IBM)"
+# OCR garbles letter case (sP, [sT], (AAPl)) and injects "gfedc" checkbox noise
+# that can split the amount range across a line wrap. All handled below.
+_JAMMED_AMT = (
+    r"(?:(?P<amt_low>\$[\d,]+(?:\.\d+)?)"
+    r"(?:\s*-\s*(?:gfedc\s*)?(?P<amt_high>\$[\d,]+(?:\.\d+)?))?"
+    r"|(?P<amt_special>Spouse/DC\s+Over))"
+)
+_JAMMED_A = re.compile(
+    r"^(?:\d{7,12}\s+)?(?:(?P<owner_code>SP|JT|DC)\s+)?"
+    r"(?P<asset_raw>.+?\([A-Za-z]{1,5}\))"
+    r"(?:\s+\[[A-Za-z]{2}\])?"
+    r"\s+(?P<tx_type>[PSE])\s+"
+    r"(?P<tx_date>\d{1,2}/\d{1,2}/\d{4})\s+(?P<disc_date>\d{1,2}/\d{1,2}/\d{4})\s+"
+    + _JAMMED_AMT,
+    re.IGNORECASE,
+)
+_JAMMED_B = re.compile(
+    r"^(?:(?P<owner_code>SP|JT|DC)\s+)?"
+    r"(?P<asset_raw>.+?)\s+(?P<tx_type>[PSE])\s+"
+    r"(?P<tx_date>\d{1,2}/\d{1,2}/\d{4})\s+(?P<disc_date>\d{1,2}/\d{1,2}/\d{4})\s+"
+    + _JAMMED_AMT + r"[^\n]*\n\((?P<ticker>[A-Za-z]{1,5})\)",
+    re.IGNORECASE,
+)
+_JAMMED_C = re.compile(
+    r"^(?:\d{7,12}\s+)?(?:(?P<owner_code>SP|JT|DC)\s+)?"
+    r"(?P<asset_head>.+?)\s+(?P<tx_type>[PSE])\s+"
+    r"(?P<tx_date>\d{1,2}/\d{1,2}/\d{4})\s+(?P<disc_date>\d{1,2}/\d{1,2}/\d{4})\s+"
+    r"(?P<amt_low>\$[\d,]+(?:\.\d+)?)\s*-\s*(?:gfedc\b\s*)?"
+    r"(?P<amt_mid>[^$]*?)(?P<amt_high>\$[\d,]+(?:\.\d+)?)"
+    r"[^\n]*(?P<rest>.*)$",
+    re.IGNORECASE | re.DOTALL,
+)
+# Lines after which the trade data ends and free-text begins; the real ticker
+# and asset-type tag always appear before the first of these.
+_JAMMED_NOISE = re.compile(r"(?im)^\s*(FIL[I1]NG\s+STATUS|SUBHOLDING\s+OF|DESCRIPTION|LOCATION)\s*:")
+_JAMMED_TICKER = re.compile(r"\(([A-Za-z]{1,5})\)")
+_JAMMED_INLINE_TICKER = re.compile(r"\(([A-Za-z]{1,5})\)\s*$")
+_JAMMED_TAG = re.compile(r"\[([A-Za-z]{2})\]")
+_JAMMED_ASSET_OK = {"ST", "EQ"}  # mirror ASSET_INCLUDE; other tags are non-equity
 
 
 def load_existing(out_path):
@@ -128,8 +175,85 @@ def parse_amount_mid(amount_str):
     return None
 
 
+def _jammed_amount(low, high, special):
+    if special:
+        return special.strip()
+    if high:
+        return f"{low} - {high}"
+    return low
+
+
+def _jammed_asset_type_ok(text):
+    """False if an asset-type tag is present and is not an equity ([ST]/[EQ])."""
+    nm = _JAMMED_NOISE.search(text)
+    region = text[: nm.start()] if nm else text
+    m = _JAMMED_TAG.search(region)
+    return not (m and m.group(1).upper() not in _JAMMED_ASSET_OK)
+
+
+def _jammed_fields(raw):
+    """Pull (owner_code, tx_type, tx_date, disc_date, amount, ticker, asset) from a
+    jammed row string, or None if it isn't a recoverable stock trade."""
+    if not _jammed_asset_type_ok(raw):
+        return None
+    m = _JAMMED_A.match(raw)
+    if m:
+        gd = m.groupdict()
+        tm = _JAMMED_INLINE_TICKER.search(gd["asset_raw"])
+        amt = _jammed_amount(gd["amt_low"], gd["amt_high"], gd["amt_special"])
+        return (gd["owner_code"], gd["tx_type"], gd["tx_date"], gd["disc_date"],
+                amt, tm.group(1).upper(), gd["asset_raw"][: tm.start()].strip(" -"))
+    m = _JAMMED_B.match(raw)
+    if m:
+        gd = m.groupdict()
+        amt = _jammed_amount(gd["amt_low"], gd["amt_high"], gd["amt_special"])
+        return (gd["owner_code"], gd["tx_type"], gd["tx_date"], gd["disc_date"],
+                amt, gd["ticker"].upper(), gd["asset_raw"].strip())
+    m = _JAMMED_C.match(raw)
+    if m:
+        cont = (m.group("amt_mid") or "") + " " + m.group("rest")
+        nm = _JAMMED_NOISE.search(cont)
+        region = cont[: nm.start()] if nm else cont
+        tickers = _JAMMED_TICKER.findall(region)
+        if not tickers:
+            return None
+        idx = region.rfind("(" + tickers[-1] + ")")
+        cont_clean = region[:idx] + region[idx + len(tickers[-1]) + 2:]
+        asset = _JAMMED_TAG.sub(" ", m.group("asset_head") + " " + cont_clean)
+        asset = re.sub(r"\s+", " ", asset).strip()
+        amt = _jammed_amount(m.group("amt_low"), m.group("amt_high"), None)
+        return (m.group("owner_code"), m.group("tx_type"), m.group("tx_date"),
+                m.group("disc_date"), amt, tickers[-1].upper(), asset)
+    return None
+
+
+def parse_jammed_row(raw, member):
+    """Recover a trade dict from a jammed col[0] string, or None if unparseable.
+    Output shape is identical to a normally-parsed trade."""
+    fields = _jammed_fields(raw)
+    if fields is None:
+        return None
+    owner_code, tx_type, tx_date, disc_date, amount_raw, ticker, asset_desc = fields
+    return {
+        "transaction_date": tx_date.strip(),
+        "disclosure_date": disc_date.strip(),
+        "ticker": ticker,
+        "asset_description": asset_desc,
+        "asset_type": "Stock",
+        "type": TYPE_MAP.get(tx_type.upper(), tx_type.upper()),
+        "amount": amount_raw,
+        "amount_mid": parse_amount_mid(amount_raw),
+        "representative": f"{member['first']} {member['last']}",
+        "district": member["district"],
+        "owner": OWNER_MAP.get((owner_code or "").upper(), "Self"),
+        "filing_id": member["doc_id"],
+        "source_url": PDF_URL.format(year=member["year"], doc_id=member["doc_id"]),
+    }
+
+
 def parse_pdf(pdf_bytes, member):
     trades = []
+    jammed = []
     try:
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             last_col = None
@@ -149,6 +273,19 @@ def parse_pdf(pdf_bytes, member):
                 max_col = max(col.values())
                 for row in table:
                     if not row or len(row) <= max_col:
+                        continue
+                    if row[0] and len(row) > 1 and all(c is None for c in row[1:]):
+                        recovered = parse_jammed_row(row[0], member)
+                        if recovered is not None:
+                            trades.append(recovered)
+                        else:
+                            jammed.append({
+                                "year": member["year"],
+                                "doc_id": member["doc_id"],
+                                "representative": f"{member['first']} {member['last']}",
+                                "district": member["district"],
+                                "raw": row[0],
+                            })
                         continue
                     tx_type = (row[col["tx_type"]] or "").strip()
                     if tx_type not in ("P", "S", "E"):
@@ -174,7 +311,9 @@ def parse_pdf(pdf_bytes, member):
                     owner_code = (row[owner_col] or "").strip() if owner_col < len(row) else ""
                     owner = OWNER_MAP.get(owner_code, owner_code)
 
-                    amount_raw = (row[col["amount"]] or "").strip()
+                    # Collapse internal whitespace: multi-line amount cells
+                    # otherwise keep a newline, e.g. "$15,001 -\n$50,000".
+                    amount_raw = " ".join((row[col["amount"]] or "").split())
                     amount_mid = parse_amount_mid(amount_raw)
                     if amount_mid is None and amount_raw:
                         log.warning(f"Could not parse amount '{amount_raw}' for {member['doc_id']}")
@@ -196,7 +335,7 @@ def parse_pdf(pdf_bytes, member):
                     })
     except Exception as e:
         log.error(f"Failed to parse PDF for DocID {member['doc_id']}: {e}")
-    return trades
+    return trades, jammed
 
 
 def fetch_pdf(member):
@@ -226,6 +365,9 @@ def main():
     existing_trades, known_ids = load_existing(out_path)
     log.info(f"Loaded {len(existing_trades)} existing trades. Scanning years: {SCAN_YEARS}")
 
+    jammed_path = os.path.join(os.path.dirname(out_path), "jammed_rows.jsonl")
+    jammed_log = open(jammed_path, "a", encoding="utf-8")
+
     new_trades = []
     for year in SCAN_YEARS:
         members = fetch_index(year)
@@ -235,9 +377,15 @@ def main():
             log.info(f"  [{year}] {i+1}/{len(new_in_year)} — {member['first']} {member['last']} ({member['doc_id']})")
             pdf_bytes = fetch_pdf(member)
             if pdf_bytes:
-                trades = parse_pdf(pdf_bytes, member)
+                trades, jammed = parse_pdf(pdf_bytes, member)
                 new_trades.extend(trades)
+                for j in jammed:
+                    jammed_log.write(json.dumps(j) + "\n")
+                jammed_log.flush()
             time.sleep(DELAY)
+
+    jammed_log.close()
+    log.info(f"Jammed rows log written to {jammed_path}")
 
     all_trades = existing_trades + new_trades
     all_trades.sort(key=sort_key, reverse=True)

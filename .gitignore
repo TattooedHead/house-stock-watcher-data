@@ -1,0 +1,7 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Local safety snapshots (git history is the backup)
+data/*.backup.json
+data/*.prerepair.json
