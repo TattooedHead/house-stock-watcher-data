@@ -26,6 +26,7 @@ ASSET_INCLUDE = {"[ST]", "[EQ]"}
 
 TICKER_RE = re.compile(r'\(([A-Z]{1,5})\)')
 ASSET_TYPE_RE = re.compile(r'\[([A-Z]{2})\]')
+_AMOUNT_CLEAN_RE = re.compile(r'[$,]')
 
 
 def load_existing(out_path):
@@ -37,12 +38,27 @@ def load_existing(out_path):
     return data, known_ids
 
 
+def fetch_with_retry(url, max_retries=3, backoff=2.0, timeout=30):
+    last_exc = None
+    for attempt in range(max_retries):
+        try:
+            resp = requests.get(url, headers=HEADERS, timeout=timeout)
+            resp.raise_for_status()
+            return resp
+        except Exception as e:
+            last_exc = e
+            if attempt < max_retries - 1:
+                wait = backoff ** attempt
+                log.warning(f"Retry {attempt + 1}/{max_retries - 1} for {url}: {e}, waiting {wait:.0f}s")
+                time.sleep(wait)
+    raise last_exc
+
+
 def fetch_index(year):
     url = ZIP_URL.format(year=year)
     log.info(f"Downloading index ZIP for {year}...")
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=30)
-        resp.raise_for_status()
+        resp = fetch_with_retry(url)
     except Exception as e:
         log.error(f"Failed to download ZIP for {year}: {e}")
         return []
@@ -72,21 +88,72 @@ def fetch_index(year):
     return members
 
 
+def find_header_row(table):
+    for row in table:
+        if not row:
+            continue
+        mapping = {}
+        for col_idx, cell in enumerate(row):
+            if cell is None:
+                continue
+            norm = cell.lower().replace("\n", " ").strip()
+            if "asset" in norm:
+                mapping["asset"] = col_idx
+            elif "transaction type" in norm or norm == "type":
+                mapping["tx_type"] = col_idx
+            elif "transaction date" in norm or norm == "date":
+                mapping["tx_date"] = col_idx
+            elif "notification" in norm or "disclosure" in norm:
+                mapping["disc_date"] = col_idx
+            elif "amount" in norm:
+                mapping["amount"] = col_idx
+            elif norm == "sp" or "owner" in norm:
+                mapping["owner"] = col_idx
+        if all(k in mapping for k in ("asset", "tx_type", "tx_date", "disc_date", "amount")):
+            return mapping
+    return None
+
+
+def parse_amount_mid(amount_str):
+    cleaned = _AMOUNT_CLEAN_RE.sub("", amount_str).strip()
+    parts = cleaned.split(" - ")
+    try:
+        if len(parts) == 2:
+            return (int(parts[0].strip()) + int(parts[1].strip())) // 2
+        nums = re.findall(r'\d+', cleaned)
+        if nums:
+            return int(nums[0])
+    except (ValueError, IndexError):
+        pass
+    return None
+
+
 def parse_pdf(pdf_bytes, member):
     trades = []
     try:
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+            last_col = None
             for page in pdf.pages:
                 table = page.extract_table()
                 if not table:
                     continue
+                col = find_header_row(table)
+                if col is not None:
+                    last_col = col
+                elif last_col is not None:
+                    col = last_col
+                else:
+                    log.warning(f"No column mapping for {member['doc_id']} page {page.page_number}, skipping")
+                    continue
+
+                max_col = max(col.values())
                 for row in table:
-                    if not row or len(row) < 8:
+                    if not row or len(row) <= max_col:
                         continue
-                    tx_type = (row[3] or "").strip()
+                    tx_type = (row[col["tx_type"]] or "").strip()
                     if tx_type not in ("P", "S", "E"):
                         continue
-                    asset_raw = (row[2] or "").replace("\n", " ").strip()
+                    asset_raw = (row[col["asset"]] or "").replace("\n", " ").strip()
 
                     type_match = ASSET_TYPE_RE.search(asset_raw)
                     if not type_match:
@@ -103,17 +170,24 @@ def parse_pdf(pdf_bytes, member):
                     asset_desc = ASSET_TYPE_RE.sub("", asset_raw)
                     asset_desc = TICKER_RE.sub("", asset_desc).strip(" -")
 
-                    owner_code = (row[1] or "").strip()
+                    owner_col = col.get("owner", 1)
+                    owner_code = (row[owner_col] or "").strip() if owner_col < len(row) else ""
                     owner = OWNER_MAP.get(owner_code, owner_code)
 
+                    amount_raw = (row[col["amount"]] or "").strip()
+                    amount_mid = parse_amount_mid(amount_raw)
+                    if amount_mid is None and amount_raw:
+                        log.warning(f"Could not parse amount '{amount_raw}' for {member['doc_id']}")
+
                     trades.append({
-                        "transaction_date": (row[4] or "").strip(),
-                        "disclosure_date": (row[5] or "").strip(),
+                        "transaction_date": (row[col["tx_date"]] or "").strip(),
+                        "disclosure_date": (row[col["disc_date"]] or "").strip(),
                         "ticker": ticker,
                         "asset_description": asset_desc,
                         "asset_type": "Stock",
                         "type": TYPE_MAP.get(tx_type, tx_type),
-                        "amount": (row[6] or "").strip(),
+                        "amount": amount_raw,
+                        "amount_mid": amount_mid,
                         "representative": f"{member['first']} {member['last']}",
                         "district": member["district"],
                         "owner": owner,
@@ -128,8 +202,7 @@ def parse_pdf(pdf_bytes, member):
 def fetch_pdf(member):
     url = PDF_URL.format(year=member["year"], doc_id=member["doc_id"])
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=30)
-        resp.raise_for_status()
+        resp = fetch_with_retry(url)
         return resp.content
     except Exception as e:
         log.error(f"Failed to download PDF {member['doc_id']}: {e}")
