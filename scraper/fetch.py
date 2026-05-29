@@ -227,6 +227,18 @@ def _jammed_fields(raw):
     return None
 
 
+def normalize_date(s):
+    """Zero-pad a M/D/YYYY date to MM/DD/YYYY for a consistent schema.
+    Idempotent. Returns the input unchanged (stripped) if it isn't a
+    3-part all-numeric date, so garbled values are never silently lost."""
+    s = (s or "").strip()
+    parts = s.split("/")
+    if len(parts) == 3 and all(p.isdigit() for p in parts):
+        m, d, y = parts
+        return f"{int(m):02d}/{int(d):02d}/{y}"
+    return s
+
+
 def parse_jammed_row(raw, member):
     """Recover a trade dict from a jammed col[0] string, or None if unparseable.
     Output shape is identical to a normally-parsed trade."""
@@ -235,8 +247,8 @@ def parse_jammed_row(raw, member):
         return None
     owner_code, tx_type, tx_date, disc_date, amount_raw, ticker, asset_desc = fields
     return {
-        "transaction_date": tx_date.strip(),
-        "disclosure_date": disc_date.strip(),
+        "transaction_date": normalize_date(tx_date),
+        "disclosure_date": normalize_date(disc_date),
         "ticker": ticker,
         "asset_description": asset_desc,
         "asset_type": "Stock",
@@ -319,8 +331,8 @@ def parse_pdf(pdf_bytes, member):
                         log.warning(f"Could not parse amount '{amount_raw}' for {member['doc_id']}")
 
                     trades.append({
-                        "transaction_date": (row[col["tx_date"]] or "").strip(),
-                        "disclosure_date": (row[col["disc_date"]] or "").strip(),
+                        "transaction_date": normalize_date(row[col["tx_date"]] or ""),
+                        "disclosure_date": normalize_date(row[col["disc_date"]] or ""),
                         "ticker": ticker,
                         "asset_description": asset_desc,
                         "asset_type": "Stock",
