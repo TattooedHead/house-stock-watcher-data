@@ -1,5 +1,20 @@
 [
   {
+    "transaction_date": "05/14/2026",
+    "disclosure_date": "05/31/2026",
+    "ticker": "AAPL",
+    "asset_description": "Apple Inc. - Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Ed Case",
+    "district": "HI01",
+    "owner": "Spouse",
+    "filing_id": "20034668",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034668.pdf"
+  },
+  {
     "transaction_date": "05/15/2026",
     "disclosure_date": "05/28/2026",
     "ticker": "K",
