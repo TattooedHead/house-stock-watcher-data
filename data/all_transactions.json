@@ -135,6 +135,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034650.pdf"
   },
   {
+    "transaction_date": "05/28/2026",
+    "disclosure_date": "05/28/2026",
+    "ticker": "PINS",
+    "asset_description": "Pinterest, Inc. Class A Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$15,001 - $50,000",
+    "amount_mid": 32500,
+    "representative": "Christian D. Menefee",
+    "district": "TX18",
+    "owner": "Spouse",
+    "filing_id": "20034099",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034099.pdf"
+  },
+  {
     "transaction_date": "04/14/2026",
     "disclosure_date": "05/17/2026",
     "ticker": "FCNCA",
@@ -3555,6 +3570,21 @@
     "amount_mid": 32500
   },
   {
+    "transaction_date": "02/17/2026",
+    "disclosure_date": "03/17/2026",
+    "ticker": "PINS",
+    "asset_description": "Pinterest, Inc. Class A Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Christian D. Menefee",
+    "district": "TX18",
+    "owner": "Spouse",
+    "filing_id": "20034099",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034099.pdf"
+  },
+  {
     "transaction_date": "03/16/2026",
     "disclosure_date": "03/16/2026",
     "ticker": "GOOG",
@@ -4963,6 +4993,21 @@
     "owner": "Self",
     "filing_id": "20034054",
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034054.pdf"
+  },
+  {
+    "transaction_date": "02/23/2026",
+    "disclosure_date": "02/23/2026",
+    "ticker": "PINS",
+    "asset_description": "Pinterest, Inc. Class A Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$15,001",
+    "amount_mid": 15001,
+    "representative": "Christian D. Menefee",
+    "district": "TX18",
+    "owner": "Spouse",
+    "filing_id": "20034099",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034099.pdf"
   },
   {
     "transaction_date": "02/18/2026",
@@ -48163,6 +48208,21 @@
     "filing_id": "20027879",
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20027879.pdf",
     "amount_mid": 32500
+  },
+  {
+    "transaction_date": "02/26/2025",
+    "disclosure_date": "03/01/2025",
+    "ticker": "REXR",
+    "asset_description": "Rexford Industrial Realty, Inc. Common Stock F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: New S\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 O\u0000: Merrill Lynch Portfolio",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$15,001 - $50,000",
+    "amount_mid": 32500,
+    "representative": "Daniel Webster",
+    "district": "FL11",
+    "owner": "Self",
+    "filing_id": "20034562",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034562.pdf"
   },
   {
     "transaction_date": "02/13/2025",
