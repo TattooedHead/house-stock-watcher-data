@@ -1,5 +1,20 @@
 [
   {
+    "transaction_date": "05/15/2026",
+    "disclosure_date": "06/04/2026",
+    "ticker": "PG",
+    "asset_description": "Procter & Gamble Company",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Lloyd Doggett",
+    "district": "TX37",
+    "owner": "Self",
+    "filing_id": "20034712",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034712.pdf"
+  },
+  {
     "transaction_date": "05/05/2026",
     "disclosure_date": "06/02/2026",
     "ticker": "ABBV",

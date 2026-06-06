@@ -34625,6 +34625,12 @@
     "trades": 0,
     "year": 2026
   },
+  "20034552": {
+    "fetched_at": "2026-06-06",
+    "jammed": 1,
+    "trades": 0,
+    "year": 2026
+  },
   "20034556": {
     "fetched_at": null,
     "jammed": 0,
@@ -34743,6 +34749,12 @@
     "fetched_at": "2026-06-04",
     "jammed": 1,
     "trades": 4,
+    "year": 2026
+  },
+  "20034712": {
+    "fetched_at": "2026-06-06",
+    "jammed": 0,
+    "trades": 1,
     "year": 2026
   },
   "8213744": {
