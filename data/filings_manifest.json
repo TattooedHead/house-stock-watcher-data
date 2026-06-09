@@ -34517,6 +34517,12 @@
     "trades": 0,
     "year": 2026
   },
+  "20034473": {
+    "fetched_at": "2026-06-09",
+    "jammed": 1,
+    "trades": 5,
+    "year": 2026
+  },
   "20034478": {
     "fetched_at": null,
     "jammed": 0,
@@ -34721,6 +34727,12 @@
     "trades": 0,
     "year": 2026
   },
+  "20034653": {
+    "fetched_at": "2026-06-09",
+    "jammed": 1,
+    "trades": 0,
+    "year": 2026
+  },
   "20034660": {
     "fetched_at": "2026-06-05",
     "jammed": 0,
@@ -34751,8 +34763,32 @@
     "trades": 4,
     "year": 2026
   },
+  "20034702": {
+    "fetched_at": "2026-06-09",
+    "jammed": 1,
+    "trades": 0,
+    "year": 2026
+  },
   "20034712": {
     "fetched_at": "2026-06-06",
+    "jammed": 0,
+    "trades": 1,
+    "year": 2026
+  },
+  "20034718": {
+    "fetched_at": "2026-06-09",
+    "jammed": 13,
+    "trades": 25,
+    "year": 2026
+  },
+  "20034721": {
+    "fetched_at": "2026-06-09",
+    "jammed": 0,
+    "trades": 2,
+    "year": 2026
+  },
+  "20034726": {
+    "fetched_at": "2026-06-09",
     "jammed": 0,
     "trades": 1,
     "year": 2026
@@ -49315,6 +49351,12 @@
   },
   "9115822": {
     "fetched_at": "2026-05-29",
+    "jammed": 0,
+    "trades": 0,
+    "year": 2026
+  },
+  "9115901": {
+    "fetched_at": "2026-06-09",
     "jammed": 0,
     "trades": 0,
     "year": 2026
