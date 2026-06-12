@@ -1110,6 +1110,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034721.pdf"
   },
   {
+    "transaction_date": "06/04/2026",
+    "disclosure_date": "06/04/2026",
+    "ticker": "META",
+    "asset_description": "Meta Platforms, Inc. - Class A Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "John McGuire",
+    "district": "VA05",
+    "owner": "Spouse",
+    "filing_id": "20034748",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034748.pdf"
+  },
+  {
     "transaction_date": "05/05/2026",
     "disclosure_date": "06/02/2026",
     "ticker": "ABBV",
