@@ -1,5 +1,35 @@
 [
   {
+    "transaction_date": "05/07/2026",
+    "disclosure_date": "06/10/2026",
+    "ticker": "BMY",
+    "asset_description": "Bristol-Myers Squibb Company Common Stock F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: New S\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 O\u0000: Victoria Kelly Trust ICA",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$15,001 - $50,000",
+    "amount_mid": 32500,
+    "representative": "Mike Kelly",
+    "district": "PA16",
+    "owner": "Spouse",
+    "filing_id": "20034767",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034767.pdf"
+  },
+  {
+    "transaction_date": "05/07/2026",
+    "disclosure_date": "06/10/2026",
+    "ticker": "CMCSA",
+    "asset_description": "Comcast Corporation - Class A Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Mike Kelly",
+    "district": "PA16",
+    "owner": "Spouse",
+    "filing_id": "20034767",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034767.pdf"
+  },
+  {
     "transaction_date": "05/15/2026",
     "disclosure_date": "06/05/2026",
     "ticker": "ABT",
