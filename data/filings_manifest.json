@@ -23069,6 +23069,12 @@
     "trades": 0,
     "year": 2021
   },
+  "20020055": {
+    "fetched_at": "2026-06-16",
+    "jammed": 1,
+    "trades": 0,
+    "year": 2026
+  },
   "20020062": {
     "fetched_at": null,
     "jammed": 0,
@@ -34775,6 +34781,12 @@
     "trades": 0,
     "year": 2026
   },
+  "20034706": {
+    "fetched_at": "2026-06-16",
+    "jammed": 0,
+    "trades": 2,
+    "year": 2026
+  },
   "20034709": {
     "fetched_at": "2026-06-10",
     "jammed": 0,
@@ -34839,6 +34851,12 @@
     "fetched_at": "2026-06-13",
     "jammed": 1,
     "trades": 2,
+    "year": 2026
+  },
+  "20034780": {
+    "fetched_at": "2026-06-16",
+    "jammed": 0,
+    "trades": 7,
     "year": 2026
   },
   "8213744": {
