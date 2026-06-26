@@ -285,6 +285,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034780.pdf"
   },
   {
+    "transaction_date": "06/10/2026",
+    "disclosure_date": "06/11/2026",
+    "ticker": "GD",
+    "asset_description": "General Dynamics Corporation Common Stock F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: New S\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 O\u0000: CETERA",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Dwight Evans",
+    "district": "PA03",
+    "owner": "Self",
+    "filing_id": "20034851",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034851.pdf"
+  },
+  {
     "transaction_date": "05/07/2026",
     "disclosure_date": "06/10/2026",
     "ticker": "BMY",
