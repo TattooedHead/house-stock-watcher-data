@@ -1,5 +1,35 @@
 [
   {
+    "transaction_date": "06/15/2026",
+    "disclosure_date": "06/30/2026",
+    "ticker": "CVX",
+    "asset_description": "Chevron Corporation Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "David J. Taylor",
+    "district": "OH02",
+    "owner": "Self",
+    "filing_id": "20034897",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034897.pdf"
+  },
+  {
+    "transaction_date": "06/15/2026",
+    "disclosure_date": "06/30/2026",
+    "ticker": "IBP",
+    "asset_description": "Installed Building Products, Inc. Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "David J. Taylor",
+    "district": "OH02",
+    "owner": "Self",
+    "filing_id": "20034897",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034897.pdf"
+  },
+  {
     "transaction_date": "06/16/2026",
     "disclosure_date": "06/17/2026",
     "ticker": "GOOGL",
