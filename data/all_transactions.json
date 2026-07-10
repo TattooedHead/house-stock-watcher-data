@@ -1110,6 +1110,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034897.pdf"
   },
   {
+    "transaction_date": "06/15/2026",
+    "disclosure_date": "06/30/2026",
+    "ticker": "SPCX",
+    "asset_description": "Space Exploration Technologies Corp. - Class A Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "John McGuire",
+    "district": "VA05",
+    "owner": "Spouse",
+    "filing_id": "20034942",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034942.pdf"
+  },
+  {
     "transaction_date": "06/16/2026",
     "disclosure_date": "06/17/2026",
     "ticker": "GOOGL",
@@ -35188,6 +35203,21 @@
     "filing_id": "20030930",
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20030930.pdf",
     "amount_mid": 8000
+  },
+  {
+    "transaction_date": "01/07/2025",
+    "disclosure_date": "08/01/2025",
+    "ticker": "MCK",
+    "asset_description": "McKesson Corporation Common Stock F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: Amended C\u0000\u0000\u0000\u0000\u0000\u0000\u0000: This investment is held within a publicly available, widely held independently managed portfolio over which I have no authority to exercise control over or influence the financial interests held by the portfolio. The assets of the portfolio are widely diversified, and all investment decisions are made solely by the independent manager, without my input or direction.",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Ritchie John Torres",
+    "district": "NY15",
+    "owner": "Self",
+    "filing_id": "20034224",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034224.pdf"
   },
   {
     "transaction_date": "07/18/2025",
