@@ -1,5 +1,20 @@
 [
   {
+    "transaction_date": "06/17/2026",
+    "disclosure_date": "07/14/2026",
+    "ticker": "ICHR",
+    "asset_description": "Ichor Holdings - Ordinary Shares",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$2,722.50",
+    "amount_mid": 2722,
+    "representative": "Debbie Wasserman Schultz",
+    "district": "FL25",
+    "owner": "Self",
+    "filing_id": "20034999",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034999.pdf"
+  },
+  {
     "transaction_date": "07/08/2026",
     "disclosure_date": "07/09/2026",
     "ticker": "ABT",
@@ -238,6 +253,36 @@
     "owner": "Self",
     "filing_id": "20034923",
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034923.pdf"
+  },
+  {
+    "transaction_date": "06/29/2026",
+    "disclosure_date": "07/06/2026",
+    "ticker": "HONAV",
+    "asset_description": "Honeywell Aerospace Inc. - Common Stock (HONAV) F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: New S\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 O\u0000: Morgan Stanley Smith Barney LLC Brokerage Account D\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000: Asset acquired when certain Honeywell International Inc. (HON) shares were exchanged for Honeywell Aerospace Inc. shares due to a spinoff.",
+    "asset_type": "Stock",
+    "type": "Exchange",
+    "amount": "$50,001 - $100,000",
+    "amount_mid": 75000,
+    "representative": "Debbie Dingell",
+    "district": "MI06",
+    "owner": "Self",
+    "filing_id": "20034960",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034960.pdf"
+  },
+  {
+    "transaction_date": "06/29/2026",
+    "disclosure_date": "07/06/2026",
+    "ticker": "HONAV",
+    "asset_description": "Honeywell Aerospace Inc. - Common Stock",
+    "asset_type": "Stock",
+    "type": "Exchange",
+    "amount": "$15,001 - $50,000",
+    "amount_mid": 32500,
+    "representative": "Debbie Dingell",
+    "district": "MI06",
+    "owner": "Self",
+    "filing_id": "20034960",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034960.pdf"
   },
   {
     "transaction_date": "06/16/2026",
