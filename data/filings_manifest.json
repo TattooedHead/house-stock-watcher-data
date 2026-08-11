@@ -35255,10 +35255,28 @@
     "trades": 1,
     "year": 2026
   },
+  "20035138": {
+    "fetched_at": "2026-08-11",
+    "jammed": 1,
+    "trades": 4,
+    "year": 2026
+  },
   "20035146": {
     "fetched_at": "2026-08-08",
     "jammed": 0,
     "trades": 10,
+    "year": 2026
+  },
+  "20035147": {
+    "fetched_at": "2026-08-11",
+    "jammed": 0,
+    "trades": 32,
+    "year": 2026
+  },
+  "20035157": {
+    "fetched_at": "2026-08-11",
+    "jammed": 0,
+    "trades": 1,
     "year": 2026
   },
   "8213744": {
@@ -49879,6 +49897,36 @@
   },
   "9116218": {
     "fetched_at": "2026-07-18",
+    "jammed": 0,
+    "trades": 0,
+    "year": 2026
+  },
+  "9116249": {
+    "fetched_at": "2026-08-11",
+    "jammed": 0,
+    "trades": 0,
+    "year": 2026
+  },
+  "9116256": {
+    "fetched_at": "2026-08-11",
+    "jammed": 0,
+    "trades": 0,
+    "year": 2026
+  },
+  "9116257": {
+    "fetched_at": "2026-08-11",
+    "jammed": 0,
+    "trades": 0,
+    "year": 2026
+  },
+  "9116258": {
+    "fetched_at": "2026-08-11",
+    "jammed": 0,
+    "trades": 0,
+    "year": 2026
+  },
+  "9116260": {
+    "fetched_at": "2026-08-11",
     "jammed": 0,
     "trades": 0,
     "year": 2026
