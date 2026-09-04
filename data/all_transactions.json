@@ -1,5 +1,20 @@
 [
   {
+    "transaction_date": "08/18/2026",
+    "disclosure_date": "09/01/2026",
+    "ticker": "NVDA",
+    "asset_description": "NVIDIA Corporation - Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "John J Mr McGuire",
+    "district": "VA05",
+    "owner": "Spouse",
+    "filing_id": "20035367",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035367.pdf"
+  },
+  {
     "transaction_date": "08/05/2026",
     "disclosure_date": "08/27/2026",
     "ticker": "ALC",
@@ -525,6 +540,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035204.pdf"
   },
   {
+    "transaction_date": "08/13/2026",
+    "disclosure_date": "08/13/2026",
+    "ticker": "AAPL",
+    "asset_description": "Apple Inc. - Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Cleo Fields",
+    "district": "LA06",
+    "owner": "Self",
+    "filing_id": "20035345",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035345.pdf"
+  },
+  {
     "transaction_date": "07/17/2026",
     "disclosure_date": "08/12/2026",
     "ticker": "ABT",
@@ -900,6 +930,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035204.pdf"
   },
   {
+    "transaction_date": "08/12/2026",
+    "disclosure_date": "08/12/2026",
+    "ticker": "ALL",
+    "asset_description": "Allstate Corporation",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Michael Rulli",
+    "district": "OH06",
+    "owner": "Self",
+    "filing_id": "20035365",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035365.pdf"
+  },
+  {
     "transaction_date": "08/11/2026",
     "disclosure_date": "08/11/2026",
     "ticker": "ACN",
@@ -1033,6 +1078,21 @@
     "owner": "Spouse",
     "filing_id": "20035180",
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035180.pdf"
+  },
+  {
+    "transaction_date": "08/07/2026",
+    "disclosure_date": "08/07/2026",
+    "ticker": "EQIX",
+    "asset_description": "Equinix, Inc. - Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Michael Rulli",
+    "district": "OH06",
+    "owner": "Self",
+    "filing_id": "20035365",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035365.pdf"
   },
   {
     "transaction_date": "07/17/2026",
