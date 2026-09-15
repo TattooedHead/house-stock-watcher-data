@@ -1545,6 +1545,36 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035411.pdf"
   },
   {
+    "transaction_date": "08/10/2026",
+    "disclosure_date": "09/01/2026",
+    "ticker": "LIN",
+    "asset_description": "Linde plc - Ordinary Shares",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Thomas H. Kean",
+    "district": "NJ07",
+    "owner": "Self",
+    "filing_id": "20035431",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035431.pdf"
+  },
+  {
+    "transaction_date": "08/21/2026",
+    "disclosure_date": "09/01/2026",
+    "ticker": "MTZ",
+    "asset_description": "MasTec, Inc. Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Thomas H. Kean",
+    "district": "NJ07",
+    "owner": "Self",
+    "filing_id": "20035431",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035431.pdf"
+  },
+  {
     "transaction_date": "08/05/2026",
     "disclosure_date": "08/27/2026",
     "ticker": "ALC",
@@ -44533,6 +44563,21 @@
     "owner": "Self",
     "filing_id": "20030454",
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2025/20030454.pdf"
+  },
+  {
+    "transaction_date": "06/03/2025",
+    "disclosure_date": "06/04/2025",
+    "ticker": "GOOGL",
+    "asset_description": "Alphabet Inc. - Class A Common Stock F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: Amended S\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 O\u0000: Raymond James Brokerage Account",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$250,001 - $500,000",
+    "amount_mid": 375000,
+    "representative": "John W. Rose",
+    "district": "TN06",
+    "owner": "Self",
+    "filing_id": "20035444",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035444.pdf"
   },
   {
     "transaction_date": "06/03/2025",
