@@ -1665,6 +1665,36 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035431.pdf"
   },
   {
+    "transaction_date": "08/12/2026",
+    "disclosure_date": "09/01/2026",
+    "ticker": "NFLX",
+    "asset_description": "Netflix, Inc. - Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Byron Donalds",
+    "district": "FL19",
+    "owner": "Spouse",
+    "filing_id": "20035420",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035420.pdf"
+  },
+  {
+    "transaction_date": "08/12/2026",
+    "disclosure_date": "09/01/2026",
+    "ticker": "NFLX",
+    "asset_description": "Netflix, Inc. - Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Byron Donalds",
+    "district": "FL19",
+    "owner": "Self",
+    "filing_id": "20035420",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035420.pdf"
+  },
+  {
     "transaction_date": "08/05/2026",
     "disclosure_date": "08/27/2026",
     "ticker": "ALC",
