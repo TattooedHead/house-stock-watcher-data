@@ -1,5 +1,35 @@
 [
   {
+    "transaction_date": "09/14/2026",
+    "disclosure_date": "09/18/2026",
+    "ticker": "ABBV",
+    "asset_description": "AbbVie Inc. Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$15,001",
+    "amount_mid": 15001,
+    "representative": "Pete Sessions",
+    "district": "TX17",
+    "owner": "Self",
+    "filing_id": "20035480",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035480.pdf"
+  },
+  {
+    "transaction_date": "09/14/2026",
+    "disclosure_date": "09/18/2026",
+    "ticker": "GOOGL",
+    "asset_description": "Alphabet Inc. - Class A Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$15,001 - $50,000",
+    "amount_mid": 32500,
+    "representative": "Pete Sessions",
+    "district": "TX17",
+    "owner": "Self",
+    "filing_id": "20035480",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035480.pdf"
+  },
+  {
     "transaction_date": "09/08/2026",
     "disclosure_date": "09/17/2026",
     "ticker": "PG",
