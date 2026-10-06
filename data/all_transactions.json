@@ -1470,6 +1470,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035390.pdf"
   },
   {
+    "transaction_date": "09/03/2026",
+    "disclosure_date": "09/04/2026",
+    "ticker": "GS",
+    "asset_description": "Goldman Sachs Group, Inc.",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Michael Rulli",
+    "district": "OH06",
+    "owner": "Self",
+    "filing_id": "20035558",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035558.pdf"
+  },
+  {
     "transaction_date": "08/26/2026",
     "disclosure_date": "09/03/2026",
     "ticker": "AEP",
