@@ -35711,10 +35711,34 @@
     "trades": 34,
     "year": 2026
   },
+  "20035627": {
+    "fetched_at": "2026-10-16",
+    "jammed": 2,
+    "trades": 0,
+    "year": 2026
+  },
   "20035635": {
     "fetched_at": "2026-10-14",
     "jammed": 0,
     "trades": 4,
+    "year": 2026
+  },
+  "20035648": {
+    "fetched_at": "2026-10-16",
+    "jammed": 0,
+    "trades": 2,
+    "year": 2026
+  },
+  "20035651": {
+    "fetched_at": "2026-10-16",
+    "jammed": 1,
+    "trades": 0,
+    "year": 2026
+  },
+  "20035652": {
+    "fetched_at": "2026-10-16",
+    "jammed": 1,
+    "trades": 0,
     "year": 2026
   },
   "8213744": {

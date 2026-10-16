@@ -1,5 +1,35 @@
 [
   {
+    "transaction_date": "09/22/2026",
+    "disclosure_date": "10/14/2026",
+    "ticker": "AZO",
+    "asset_description": "AutoZone, Inc. Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$15,001",
+    "amount_mid": 15001,
+    "representative": "Richard W. Allen",
+    "district": "GA12",
+    "owner": "Spouse",
+    "filing_id": "20035648",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035648.pdf"
+  },
+  {
+    "transaction_date": "09/18/2026",
+    "disclosure_date": "10/14/2026",
+    "ticker": "COST",
+    "asset_description": "Costco Wholesale Corporation - Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Richard W. Allen",
+    "district": "GA12",
+    "owner": "Spouse",
+    "filing_id": "20035648",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035648.pdf"
+  },
+  {
     "transaction_date": "10/08/2026",
     "disclosure_date": "10/12/2026",
     "ticker": "ADI",
