@@ -1185,6 +1185,36 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035499.pdf"
   },
   {
+    "transaction_date": "08/24/2026",
+    "disclosure_date": "09/21/2026",
+    "ticker": "BAC",
+    "asset_description": "Bank of America Corporation Common Stock F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: New",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$50,001 - $100,000",
+    "amount_mid": 75000,
+    "representative": "Laurel Lee",
+    "district": "FL15",
+    "owner": "Spouse",
+    "filing_id": "20035490",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035490.pdf"
+  },
+  {
+    "transaction_date": "09/18/2026",
+    "disclosure_date": "09/21/2026",
+    "ticker": "NOKBF",
+    "asset_description": "NOKIA A SHS",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$15,001 - $50,000",
+    "amount_mid": 32500,
+    "representative": "Laurel Lee",
+    "district": "FL15",
+    "owner": "Spouse",
+    "filing_id": "20035490",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035490.pdf"
+  },
+  {
     "transaction_date": "09/14/2026",
     "disclosure_date": "09/18/2026",
     "ticker": "ABBV",
