@@ -210,6 +210,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035563.pdf"
   },
   {
+    "transaction_date": "10/20/2026",
+    "disclosure_date": "10/20/2026",
+    "ticker": "FMAO",
+    "asset_description": "Farmers & Merchants Bancorp, Inc.",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Robert E. Latta",
+    "district": "OH05",
+    "owner": "Spouse",
+    "filing_id": "20035763",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035763.pdf"
+  },
+  {
     "transaction_date": "10/16/2026",
     "disclosure_date": "10/16/2026",
     "ticker": "GOOG",
