@@ -570,6 +570,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035635.pdf"
   },
   {
+    "transaction_date": "10/07/2026",
+    "disclosure_date": "10/12/2026",
+    "ticker": "WBD",
+    "asset_description": "Warner Bros. Discovery, Inc. - Series A Common Stock F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: New S\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 O\u0000: Fidelity Retail Account",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "David Kustoff",
+    "district": "TN08",
+    "owner": "Joint",
+    "filing_id": "20024921",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20024921.pdf"
+  },
+  {
     "transaction_date": "09/18/2026",
     "disclosure_date": "10/09/2026",
     "ticker": "ABT",
