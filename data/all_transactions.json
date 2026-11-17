@@ -840,6 +840,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035806.pdf"
   },
   {
+    "transaction_date": "11/09/2026",
+    "disclosure_date": "11/09/2026",
+    "ticker": "JBGS",
+    "asset_description": "JBG SMITH Properties Common Shares F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: New S\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 O\u0000: HILL 1998 TRUST D\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000: FULL-LIQUIDATION.",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "James French Hill",
+    "district": "AR02",
+    "owner": "Self",
+    "filing_id": "20035807",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035807.pdf"
+  },
+  {
     "transaction_date": "10/01/2026",
     "disclosure_date": "11/05/2026",
     "ticker": "KO",
@@ -913,6 +928,51 @@
     "owner": "Spouse",
     "filing_id": "20035775",
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035775.pdf"
+  },
+  {
+    "transaction_date": "10/22/2026",
+    "disclosure_date": "11/02/2026",
+    "ticker": "DDOG",
+    "asset_description": "Datadog, Inc. - Class A Common Stock",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Jonathan Jackson",
+    "district": "IL01",
+    "owner": "Self",
+    "filing_id": "20035757",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035757.pdf"
+  },
+  {
+    "transaction_date": "10/12/2026",
+    "disclosure_date": "11/02/2026",
+    "ticker": "EL",
+    "asset_description": "Estee Lauder Companies, Inc.",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Jonathan Jackson",
+    "district": "IL01",
+    "owner": "Spouse",
+    "filing_id": "20035757",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035757.pdf"
+  },
+  {
+    "transaction_date": "10/12/2026",
+    "disclosure_date": "11/02/2026",
+    "ticker": "SPHR",
+    "asset_description": "Sphere Entertainment Co. Class A Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Jonathan Jackson",
+    "district": "IL01",
+    "owner": "Spouse",
+    "filing_id": "20035757",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035757.pdf"
   },
   {
     "transaction_date": "10/23/2026",
