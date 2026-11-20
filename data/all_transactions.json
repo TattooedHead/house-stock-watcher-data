@@ -1,5 +1,20 @@
 [
   {
+    "transaction_date": "10/07/2026",
+    "disclosure_date": "11/16/2026",
+    "ticker": "WBD",
+    "asset_description": "Warner Bros. Discovery, Inc. - Series A Common Stock F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: New S\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 O\u0000: Stephens Advantage Account",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Steve Cohen",
+    "district": "TN09",
+    "owner": "Self",
+    "filing_id": "20036849",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20036849.pdf"
+  },
+  {
     "transaction_date": "11/03/2026",
     "disclosure_date": "11/12/2026",
     "ticker": "K",
@@ -855,6 +870,21 @@
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035807.pdf"
   },
   {
+    "transaction_date": "11/05/2026",
+    "disclosure_date": "11/06/2026",
+    "ticker": "TPR",
+    "asset_description": "Tapestry, Inc. Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Terri A. Sewell",
+    "district": "AL07",
+    "owner": "Self",
+    "filing_id": "20036864",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20036864.pdf"
+  },
+  {
     "transaction_date": "10/01/2026",
     "disclosure_date": "11/05/2026",
     "ticker": "KO",
@@ -928,6 +958,21 @@
     "owner": "Spouse",
     "filing_id": "20035775",
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035775.pdf"
+  },
+  {
+    "transaction_date": "11/04/2026",
+    "disclosure_date": "11/04/2026",
+    "ticker": "MSFT",
+    "asset_description": "Microsoft Corporation - Common Stock F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: New S\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 O\u0000: Merrill Lynch SIMPLE Managed Account",
+    "asset_type": "Stock",
+    "type": "Purchase",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Michael Rulli",
+    "district": "OH06",
+    "owner": "Self",
+    "filing_id": "20036855",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20036855.pdf"
   },
   {
     "transaction_date": "10/22/2026",
@@ -1303,6 +1348,36 @@
     "owner": "Self",
     "filing_id": "20035563",
     "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20035563.pdf"
+  },
+  {
+    "transaction_date": "10/07/2026",
+    "disclosure_date": "10/22/2026",
+    "ticker": "WBD",
+    "asset_description": "Warner Bros. Discovery, Inc. - Series A Common Stock F\u0000\u0000\u0000\u0000\u0000 S\u0000\u0000\u0000\u0000\u0000: New S\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 O\u0000: State Street Bank & Trust Co. D\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000: Non-discretionary transaction to Filer as part of Paramount acquisition of WBD",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Thomas H. Kean",
+    "district": "NJ07",
+    "owner": "Self",
+    "filing_id": "20036844",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20036844.pdf"
+  },
+  {
+    "transaction_date": "10/07/2026",
+    "disclosure_date": "10/22/2026",
+    "ticker": "WBD",
+    "asset_description": "Warner Bros. Discovery, Inc. - Series A Common Stock",
+    "asset_type": "Stock",
+    "type": "Sale",
+    "amount": "$1,001 - $15,000",
+    "amount_mid": 8000,
+    "representative": "Thomas H. Kean",
+    "district": "NJ07",
+    "owner": "Spouse",
+    "filing_id": "20036844",
+    "source_url": "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20036844.pdf"
   },
   {
     "transaction_date": "10/20/2026",
